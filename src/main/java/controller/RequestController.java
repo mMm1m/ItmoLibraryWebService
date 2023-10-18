@@ -1,4 +1,4 @@
-package com.example.demo;
+package controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,18 +27,26 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-@RestController
-@RequestMapping("/something/path")
+@Controller
 public class RequestController {
 
     // get html from url with 2 methods
-    @GetMapping("/next")
+    private String inputHtml = "https://www.labirint.ru/books/512969/";
+    /*@RequestMapping(value = "/books",method = RequestMethod.GET)
+    @ResponseBody
     public String getHtml(HttpServletRequest request) throws IOException {
         String urlInTextFormat = request.getRequestURL().toString();
+        System.out.println(Jsoup.connect(urlInTextFormat).get().html());
         return Jsoup.connect(urlInTextFormat).get().html();
+    }*/
+
+    @RequestMapping(value = "/books",method = RequestMethod.GET)
+    @ResponseBody
+    public String getURL(HttpServletRequest request) {
+        return request.getRequestURL().toString();
     }
 
-    @GetMapping
+    /*@GetMapping
     public String getHTMLFromHTTPClient() throws IOException, InterruptedException {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
@@ -48,6 +56,6 @@ public class RequestController {
             HttpResponse<String> response = client.send(request,
                     HttpResponse.BodyHandlers.ofString());
             return response.body();
-    }
+    }*/
 
 }
