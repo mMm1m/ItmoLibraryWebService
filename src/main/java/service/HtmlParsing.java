@@ -1,13 +1,8 @@
 package service;
 
 import org.jsoup.nodes.Document;
-
-import javax.print.Doc;
-
+// common html parser for all libraries_html
 public interface HtmlParsing {
-    boolean checkShopName(Document document);
     boolean checkGenre(Document document);
-   // boolean checkIsLabyrinth(Document document);
-
-
+    boolean checkIsCorrectShop(boolean criteria1, boolean criteria2);
 }
