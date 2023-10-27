@@ -1,7 +1,11 @@
-package com.example.demo;
+package controller;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Getter;
+import lombok.Setter;
+import org.json.simple.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.helper.HttpConnection;
@@ -13,6 +17,11 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+//import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UrlPathHelper;
+import service.LabyrinthITParsingImpl;
+import service.LabyrinthParsingHtml;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLParameters;
@@ -28,26 +37,16 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 @RestController
-@RequestMapping("/something/path")
+@Getter
+@Setter
 public class RequestController {
-
-    // get html from url with 2 methods
-    @GetMapping("/next")
-    public String getHtml(HttpServletRequest request) throws IOException {
-        String urlInTextFormat = request.getRequestURL().toString();
-        return Jsoup.connect(urlInTextFormat).get().html();
+    private Document document = null;
+    private String url = null;
+    public RequestController(){}
+    @RequestMapping(value = "/books/{id}", method = RequestMethod.GET)
+    public void getURL(HttpServletRequest request) throws IOException {
+        this.url = request.getRequestURL().toString();
+        this.document = Jsoup.connect(url).get();
+        System.out.println();
     }
-
-    @GetMapping
-    public String getHTMLFromHTTPClient() throws IOException, InterruptedException {
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://www.labirint.ru/books/512969/"))
-                    .GET() // GET is default
-                    .build();
-            HttpResponse<String> response = client.send(request,
-                    HttpResponse.BodyHandlers.ofString());
-            return response.body();
-    }
-
 }
