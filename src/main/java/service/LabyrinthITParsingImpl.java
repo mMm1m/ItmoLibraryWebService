@@ -1,11 +1,14 @@
 package service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import controller.RequestController;
 import exception.IncorrectBookID;
 import exception.IncorrectBookISBN;
 import exception.IncorrectBookYear;
 import models.Author;
 import models.Book;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -13,13 +16,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.reactive.function.client.WebClient;
+//import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.io.StringWriter;
 import java.util.*;
 
-@Component
+@Service
 // parsing of thr page( realize book_parser and html_parsing)
 public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements BookParser, HtmlParsing {
     @Autowired
@@ -28,6 +35,7 @@ public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements Book
     private Book book;
     private final List<Author> authors = new ArrayList<>();
     private final Set<String> idealSet =  new HashSet<>();
+    private final RequestController requestController = new RequestController();
 
     @Override
     public boolean checkLabyrinthShopName(Document document) {
