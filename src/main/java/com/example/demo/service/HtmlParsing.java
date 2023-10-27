@@ -1,4 +1,4 @@
-package service;
+package com.example.demo.service;
 
 import org.jsoup.nodes.Document;
 // common html parser for all libraries_html

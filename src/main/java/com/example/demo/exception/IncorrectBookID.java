@@ -1,4 +1,4 @@
-package exception;
+package com.example.demo.exception;
 
 public class IncorrectBookID extends Exception{
     public IncorrectBookID()

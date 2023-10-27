@@ -1,27 +1,21 @@
-package service;
+package com.example.demo.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import controller.RequestController;
-import exception.IncorrectBookID;
-import exception.IncorrectBookISBN;
-import exception.IncorrectBookYear;
-import models.Author;
-import models.Book;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import com.example.demo.controller.RequestController;
+import com.example.demo.exception.IncorrectBookID;
+import com.example.demo.exception.IncorrectBookISBN;
+import com.example.demo.exception.IncorrectBookYear;
+import com.example.demo.models.Author;
+import com.example.demo.models.Book;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.reactive.function.client.WebClient;
 //import org.springframework.web.reactive.function.client.WebClient;
 
-import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.io.StringWriter;
 import java.util.*;
@@ -29,7 +23,6 @@ import java.util.*;
 @Service
 // parsing of thr page( realize book_parser and html_parsing)
 public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements BookParser, HtmlParsing {
-    @Autowired
     private StringBuilder stringBuilder = new StringBuilder();
     private Book book;
     private final Set<String> idealSet =  new HashSet<>();

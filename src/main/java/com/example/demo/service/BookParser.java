@@ -1,10 +1,10 @@
-package service;
+package com.example.demo.service;
 
-import exception.IncorrectBookID;
-import exception.IncorrectBookISBN;
-import exception.IncorrectBookYear;
-import models.Author;
-import models.Book;
+import com.example.demo.exception.IncorrectBookID;
+import com.example.demo.exception.IncorrectBookISBN;
+import com.example.demo.exception.IncorrectBookYear;
+import com.example.demo.models.Author;
+import com.example.demo.models.Book;
 
 import java.util.List;
 // common parser for all library_type books

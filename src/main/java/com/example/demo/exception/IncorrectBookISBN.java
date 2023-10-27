@@ -1,4 +1,4 @@
-package exception;
+package com.example.demo.exception;
 
 public class IncorrectBookISBN extends Exception {
     public IncorrectBookISBN(String msg, Throwable throwable)

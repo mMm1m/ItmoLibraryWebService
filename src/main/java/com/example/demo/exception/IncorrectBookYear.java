@@ -1,4 +1,4 @@
-package exception;
+package com.example.demo.exception;
 
 public class IncorrectBookYear extends  Exception{
     public IncorrectBookYear(String msg, Throwable throwable)
