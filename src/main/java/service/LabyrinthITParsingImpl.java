@@ -30,12 +30,11 @@ import java.util.*;
 // parsing of thr page( realize book_parser and html_parsing)
 public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements BookParser, HtmlParsing {
     @Autowired
-    private Document document;
     private StringBuilder stringBuilder = new StringBuilder();
     private Book book;
-    private final List<Author> authors = new ArrayList<>();
     private final Set<String> idealSet =  new HashSet<>();
     private final RequestController requestController = new RequestController();
+    private Document document = requestController.getDocument();
 
     @Override
     public boolean checkLabyrinthShopName(Document document) {
