@@ -1,11 +1,16 @@
 package service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import exception.IncorrectBookID;
+import exception.IncorrectBookISBN;
+import exception.IncorrectBookYear;
 import models.Author;
 import models.Book;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +25,7 @@ public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements Book
     @Autowired
     private Document document;
     private StringBuilder stringBuilder = new StringBuilder();
-    private final Book book = new Book();
+    private Book book;
     private final List<Author> authors = new ArrayList<>();
     private final Set<String> idealSet =  new HashSet<>();
 
@@ -63,15 +68,15 @@ public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements Book
     }
 
     @Override
-    public String getBookName() {
+    public String getBookName(Book book) {
         String name = document.getElementById("product-title")
                 .getElementsByTag("h1").text();
-        this.book.setBookName(name);
+        book.setBookName(name);
         return  name;
     }
 
     @Override
-    public List<Author> getAuthors() {
+    public List<Author> getAuthors(Book book) {
         var authorTmp = document.getElementsByClass("authors");
         List<String> authors = new LinkedList<>();
         List<Author> authorList = new ArrayList<>();
@@ -92,7 +97,7 @@ public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements Book
     }
 
     @Override
-    public String getBookISBN() {
+    public String getBookISBN(Book book) throws IncorrectBookISBN {
         String bookISBN = document.getElementsByClass("isbn").text();
 
         for (int i = bookISBN.length() - 1; i >= 0; --i) {
@@ -104,13 +109,13 @@ public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements Book
         if (!stringBuilder.isEmpty()) {
             string = stringBuilder.reverse().toString();
             this.book.setIsbn(string);
-        } else throw new NullPointerException();
+        } else throw new IncorrectBookISBN();
         this.stringBuilder = new StringBuilder();
         return string;
     }
 
     @Override
-    public Long getBookYear() {
+    public Long getBookYear(Book book) throws IncorrectBookYear {
         String year = document.getElementsByClass("publisher").text();
         for (int i = year.length() - 1; i >= 0; --i) {
             char curr = year.charAt(i);
@@ -124,14 +129,14 @@ public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements Book
         if (!stringBuilder.isEmpty()) {
             string = stringBuilder.reverse().toString();
             this.book.setYear(Long.parseLong(string));
-        } else throw new NumberFormatException();
+        } else throw new IncorrectBookYear();
         Long ans = Long.parseLong(string);
         stringBuilder = new StringBuilder();
         return ans;
     }
 
     @Override
-    public Long getBookID() {
+    public Long getBookID(Book book) throws IncorrectBookID {
         String bookID = document.getElementsByClass("articul").text();
         int idx = bookID.length()-1;
         while(Character.isDigit(bookID.charAt(idx)))
@@ -142,38 +147,45 @@ public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements Book
         if (!stringBuilder.isEmpty()) {
             string = stringBuilder.reverse().toString();
             this.book.setId(Long.parseLong(bookID));
-        } else throw new NumberFormatException();
+        } else throw new IncorrectBookID();
         Long ans = Long.parseLong(string);
         stringBuilder = new StringBuilder();
         return ans;
     }
 
     // return json file of the book
-    public String paramsResult() throws  NullPointerException {
+    public String paramsResult()  {
         String ans = null;
+        Logger logger = LoggerFactory.getLogger(LabyrinthITParsingImpl.class);
         try
         {
             if(!checkIsCorrectShop(checkGenre(this.document), checkLabyrinthShopName(this.document)))
                 throw new InvalidObjectException("Incorrect exception");
             ObjectMapper objectMapper = new ObjectMapper();
+            this.book = new Book(getAuthors(this.book), getBookName(this.book), getBookYear(this.book), getBookISBN(this.book), getBookID(this.book));
             StringWriter writer = new StringWriter();
             objectMapper.writeValue(writer, this.book);
             ans =  writer.toString();
         }
-        catch (InvalidObjectException exception)
+        catch(InvalidObjectException exception)
         {
-            System.err.println("Incorrect shop information!!!");
-            exception.printStackTrace();
+            logger.error(exception.getMessage(), exception);
         }
-        catch(NullPointerException exception)
+        catch (IncorrectBookID exception)
         {
-            System.err.println("NullPointer exception!!!");
-            exception.printStackTrace();
+            logger.error("Incorrect shop information!!!", exception);
         }
-        catch(IOException exception)
+        catch(IncorrectBookISBN exception)
         {
-            System.err.println("In-Out exception!!!");
-            exception.printStackTrace();
+            logger.error("NullPointer exception!!!", exception);
+        }
+        catch(IncorrectBookYear exception)
+        {
+            logger.error("In-Out exception!!!", exception);
+        }
+        catch(Exception exception)
+        {
+            logger.error("", exception);
         }
         return ans;
     }

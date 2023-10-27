@@ -16,4 +16,14 @@ public class Book {
     private Long year = null;
     private String isbn = null;
     private Long id = null;
+    public Book()
+    {}
+    public Book(List<Author> authors, String bookName, Long year, String isbn, Long id)
+    {
+        this.authors = authors;
+        this.bookName = bookName;
+        this.year = year;
+        this.isbn = isbn;
+        this.id = id;
+    }
 }
