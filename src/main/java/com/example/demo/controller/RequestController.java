@@ -1,26 +1,23 @@
 package com.example.demo.controller;
 
+import com.example.demo.exception.IncorrectBookID;
+import com.example.demo.exception.IncorrectBookISBN;
+import com.example.demo.exception.IncorrectBookYear;
+import com.example.demo.service.BookParserService;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.Getter;
-import lombok.Setter;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 //import org.springframework.web.reactive.function.client.WebClient;
 
-import java.io.*;
 
 @RestController
-@Getter
-@Setter
 public class RequestController {
-    private Document document = null;
-    private String url = null;
-    public RequestController(){}
-    @RequestMapping(value = "/books/{id}", method = RequestMethod.GET)
-    public void getURL(HttpServletRequest request) throws IOException {
-        this.url = request.getRequestURL().toString();
-        this.document = Jsoup.connect(url).get();
-        System.out.println();
+    BookParserService scraperService;
+
+    @GetMapping("/books/{id}")
+    public String parsing(HttpServletRequest request) throws IncorrectBookYear, IncorrectBookID, IOException, IncorrectBookISBN {
+       // database operations
+         return scraperService.parseBookPage(request.getRequestURL().toString());
     }
 }
