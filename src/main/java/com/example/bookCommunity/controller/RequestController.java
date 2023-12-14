@@ -13,13 +13,6 @@ import java.io.IOException;
 
 @RestController
 public class RequestController {
-    BookParserService scraperService;
-
-    // метод проверяющий что ссылка на книгу валидна
-    @GetMapping("/books/{id}")
-    public String parsing(HttpServletRequest request) throws IncorrectBookYear, IncorrectBookID, IOException, IncorrectBookISBN {
-       // database operations
-         return scraperService.parseBookPage(request.getRequestURL().toString());
+    
     }
-    // добавить метод, проверяющий что isbn сслыки и isbn книги совпадают
 }
