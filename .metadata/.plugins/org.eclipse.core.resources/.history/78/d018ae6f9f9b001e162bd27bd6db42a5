@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About</title>
+  <style>
+    body {
+	  display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      border: 2px solid #000; /* цвет рамки */
+    }
+
+    #text-container {
+	  text-align: center;
+      padding: 20px;
+      border: 2px solid #000; /* цвет рамки */
+      width: 80%;
+      height: 80%;
+      box-sizing: border-box; /* учитываем границы внутриширинного размера */
+      }
+      
+      button {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+       
+    .button:hover {
+      background-color: rgb(204, 0, 0); /* Изменение цвета при наведении */
+    }
+  </style>
+</head>
+<body>
+
+<div id="text-container">
+  <h1>What the book community is about</h1>
+  <p>Hello, this page will introduce you to the main functionality of this site.
+<br>Initially, it was conceived as a simple addition of books to the database. But who needs an app like this if it doesn't allow users to interact and share their books with each other. 
+<br>Therefore, this site is a social network for book geeks, it allows users to download books and share them with others by first requesting access permission. Guests cannot download books to their devices, but they can click on the link and read the works locally.
+<br>If we talk about the way to download books, then this application provides 2 such ways:
+<br>1) The user uploads a link to the resource, and after checking for correctness, he can download the book itself.
+<br>2) Either a direct file download is available.
+<br><br>Coming soon : rating of the most generous users, discussion of books and writers in thematic groups.t</p>
+</div>
+  
+<form class="text_container" style="position: absolute; top: 43px; left: 130px;" action="/bookCommunity" method="get">
+  <button type="submit" class="custom-button">
+    Home
+  </button>
+</form>
+
+<form class="button-container" style="position: absolute; top: 43px; left: 1050px;" action="/bookCommunity/SignIn" method="post">
+  <button type="submit" class="custom-button">
+    Sign In
+  </button>
+</form>
+  
+<form class="button-container" style="position: absolute; top: 43px; left: 1105px;" action="/bookCommunity/SignUp" method="post">
+  <button type="submit" class="custom-button">
+    Sign Up
+  </button>
+</form>
+
+</body>
+</html>

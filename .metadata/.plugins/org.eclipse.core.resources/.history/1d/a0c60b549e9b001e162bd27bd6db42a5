@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In</title>
+  <style>
+    
+    body {
+	  display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      border: 2px solid #000; /* цвет рамки */
+    }
+
+    #text-container {
+	  text-align: center;
+      padding: 20px;
+      border: 2px solid #000; /* цвет рамки */
+      width: 80%;
+      height: 80%;
+      box-sizing: border-box; /* учитываем границы внутриширинного размера */
+      }
+      
+      .login-form {
+      max-width: 300px;
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+<div id="text-container">
+  <p>Ooooh, you are already registered user. Enter your login details<br></p>
+  <div class="login-form" style="position: absolute; top: 150px; left: 500px;" >
+  <form action="/submit" method="post">
+    <div class="form-group">
+      <label for="username">Логин:</label>
+      <input type="text" id="username" name="username" required>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Пароль:</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+
+    <button type="submit">Войти</button>
+  </form>
+</div>
+</div>
+
+
+  
+<form class="text_container" style="position: absolute; top: 30px; left: 130px;" action="/bookCommunity" method="get">
+  <button type="submit" class="custom-button">
+    Home
+  </button>
+</form>
+
+<form class="button-container" style="position: absolute; top: 30px; left: 1050px;" action="/bookCommunity/SignIn" method="post">
+  <button type="submit" class="custom-button">
+    Sign In
+  </button>
+</form>
+  
+<form class="button-container" style="position: absolute; top: 30px; left: 1105px;" action="/bookCommunity/SignUp" method="post">
+  <button type="submit" class="custom-button">
+    Sign Up
+  </button>
+</form>
+
+
+</body>
+</html>
+
+

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;com.example.bookCommunity.BookCommunityProjectApplication.java&apos; to &apos;DemoApplication.java&apos;&#x0A;- Original project: &apos;demo&apos;&#x0A;- Original element: &apos;com.example.bookCommunity.BookCommunityProjectApplication.java&apos;&#x0A;- Renamed element: &apos;com.example.bookCommunity.DemoApplication.java&apos;" description="Rename compilation unit &apos;BookCommunityProjectApplication.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src\/main\/java=/gradle_scope=/main=/=/gradle_used_by_scope=/main,test=/&lt;com.example.bookCommunity{BookCommunityProjectApplication.java" name="DemoApplication.java" references="false" stamp="1702680629439" version="1.0"/>
+</session>

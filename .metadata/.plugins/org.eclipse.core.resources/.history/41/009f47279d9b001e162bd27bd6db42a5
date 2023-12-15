@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookCommunity</title>
+  <style>
+    body {
+	  display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      border: 2px solid #000; /* цвет рамки */
+    }
+
+    #text-container {
+	  text-align: center;
+      padding: 20px;
+      border: 2px solid #000; /* цвет рамки */
+      width: 80%;
+      height: 80%;
+      box-sizing: border-box; /* учитываем границы внутриширинного размера */
+      }
+      
+      button {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+       
+    .button:hover {
+      background-color: rgb(204, 0, 0); /* Изменение цвета при наведении */
+    }
+  </style>
+</head>
+<body>
+
+<div id="text-container">
+  <h1>Welcome to the book community!</h1>
+  <p>Book community is a platform which help you share your books with other people
+  and discuss them with them.<br> To get started you can register or sign in top right corner.</p>
+</div>
+  
+<form class="text_container" style="position: absolute; top: 30px; left: 130px;" action="/bookCommunity" method="get">
+  <button type="submit" class="custom-button">
+    Home
+  </button>
+</form>
+
+<form class="button-container" style="position: absolute; top: 30px; left: 950px;" action="/bookCommunity/SignIn" method="post">
+  <button type="submit" class="custom-button">
+    About
+  </button>
+</form>
+
+<form class="button-container" style="position: absolute; top: 30px; left: 1000px;" action="/bookCommunity/SignIn" method="post">
+  <button type="submit" class="custom-button">
+    Sign In
+  </button>
+</form>
+  
+<form class="button-container" style="position: absolute; top: 30px; left: 1050px;" action="/bookCommunity/SignUp" method="post">
+  <button type="submit" class="custom-button">
+    Sign Up
+  </button>
+</form>
+
+</body>
+</html>
+
