@@ -29,7 +29,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity implements UserDetails {
+public class User implements UserDetails {
 	
 	@Id
 	@GeneratedValue
@@ -47,11 +47,11 @@ public class UserEntity implements UserDetails {
 	//@Column(name = "Role")
 	//private Role role = null;
 	@Column(name = "Login")
-	private String login = null;
+	private String login;
 	@Column(name = "Password")
-	private String password = null;
+	private String password;
 	@Column(name = "Mail")
-	private String mail = null;
+	private String mail;
 	@Enumerated(EnumType.STRING)
 	@Column(name = "Role")
 	private Role role;

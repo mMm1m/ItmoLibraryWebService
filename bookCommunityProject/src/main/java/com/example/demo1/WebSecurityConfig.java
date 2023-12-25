@@ -49,17 +49,13 @@ public class WebSecurityConfig {
         .authorizeHttpRequests()
         .requestMatchers(WHITE_LIST_URL)
         .permitAll()
-                        .anyRequest()
-                        .authenticated()
-                        .and()
-                        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .anyRequest()
+        .authenticated()
+        .and()
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                         .and().authenticationProvider(authenticationProvider)
                         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        //.formLogin()
-        //.loginPage("/signIn").permitAll();
-        //.sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
-        //.authenticationProvider(authenticationProvider)
-        //.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         		return http.build();
 	}
 }

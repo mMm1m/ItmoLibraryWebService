@@ -26,79 +26,65 @@ import jakarta.transaction.Transactional;
 @Controller
 @RequestMapping("/bookCommunity")
 public class GreetingController {
-	//@Autowired
-	//private ServiceImpl service;
-	//private UserRepository repo;
-	
-	//HomeController( UserRepository repo)
-	//{
-	//	this.repo =  repo;
-	//}
 	@Autowired
 	private UserRepository repo;
-	@Autowired
-	private AuthenticationService service;
 	
 	@GetMapping
-	public String home()
+	public ResponseEntity<String> home()
 	{
 		//repo.deleteAll();
-		return "main";
+		return ResponseEntity.ok("main");
 	}
 	
 	@GetMapping("signIn")
-	public String signIn()
+	public ResponseEntity<String> signIn()
 	{
-        return "signIn";
+        return ResponseEntity.ok("signIn");
 	}
 	
 	@GetMapping("about")
-	public String about()
+	public ResponseEntity<String> about()
 	{
-		return "about";
+		return ResponseEntity.ok("about");
 	}
 	
 	@GetMapping("signUp")
-    public String main() {
-        return "signUp";
+    public ResponseEntity<String> main() {
+        return ResponseEntity.ok("signUp");
     }
 	
 	@Transactional
 	@PostMapping("signIn")
-    public String auth(@RequestParam String login , @RequestParam String password , Model model) {
-		//Optional<UserEntity> u1 = repo.findByLogin(login);
-		//Optional<UserEntity> u2 = repo.findByPassword(password);
-		//if(u1 != null && u2 != null) return "userPage";
-		if(repo.existsByName("pete")) return "redirect:/entity";
-        return "signIn";
+    public ResponseEntity<String> auth(@RequestParam String login , @RequestParam String password , Model model) {
+		Optional<User> u1 = repo.findByLogin(login);
+		Optional<User> u2 = repo.findByPassword(password);
+		if(u1 != null && u2 != null)
+		{
+			if(u1.get().getId() == u2.get().getId()) return ResponseEntity.ok("redirect:/entity");
+		}
+        return new ResponseEntity<>("signIn", null, 404);
     }
 	
 	@Transactional
 	@PostMapping("signUp")
-    public String add(@RequestParam String name ,@RequestParam String login , 
+    public ResponseEntity<String> add(@RequestParam String name ,@RequestParam String login , 
     		@RequestParam String password , @RequestParam String mail , Model model) {
-		//model.addAttribute("exist", true);
-		//Random random = new Random();
-		//String id = String.valueOf(random.nextInt(1000000));
-		//if(!repo.existsById(id) )
-		//{
-			var message = UserEntity.builder()
+			var message = User.builder()
 					.name(name)
 					.login(login)
 					.mail(mail)
 					.password(password).build();
 	        repo.save(message);
-		//}
-        Iterable<UserEntity> messages = repo.findAll();
+        Iterable<User> messages = repo.findAll();
         model.addAttribute("messages", messages);
-        return "signIn";
+        return ResponseEntity.ok("signIn");
     }
 	
 	// поиск
 	@Transactional
     @PostMapping("filter")
-    public String filter(@RequestParam Integer filter, Model model) {
-    	Optional<UserEntity> user = repo.findById(filter);
+    public ResponseEntity<String> filter(@RequestParam Integer filter, Model model) {
+    	Optional<User> user = repo.findById(filter);
     	boolean flag = repo.existsById(filter);
     	if(user.isPresent())
         {
@@ -106,7 +92,7 @@ public class GreetingController {
         }
     	else model.addAttribute("messages", user);
     	model.addAttribute("exist", flag);
-        return "signUp";
+        return ResponseEntity.ok("signUp");
     }
 	
 	/*@GetMapping("/{id}")
