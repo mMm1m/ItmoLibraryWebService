@@ -30,44 +30,44 @@ public class GreetingController {
 	private UserRepository repo;
 	
 	@GetMapping
-	public ResponseEntity<String> home()
+	public String home()
 	{
 		//repo.deleteAll();
-		return ResponseEntity.ok("main");
+		return "main";
 	}
 	
 	@GetMapping("signIn")
-	public ResponseEntity<String> signIn()
+	public String signIn()
 	{
-        return ResponseEntity.ok("signIn");
+        return "signIn";
 	}
 	
 	@GetMapping("about")
-	public ResponseEntity<String> about()
+	public String about()
 	{
-		return ResponseEntity.ok("about");
+		return "about";
 	}
 	
 	@GetMapping("signUp")
-    public ResponseEntity<String> main() {
-        return ResponseEntity.ok("signUp");
+    public String main() {
+        return "signUp";
     }
 	
 	@Transactional
 	@PostMapping("signIn")
-    public ResponseEntity<String> auth(@RequestParam String login , @RequestParam String password , Model model) {
+    public String auth(@RequestParam String login , @RequestParam String password , Model model) {
 		Optional<User> u1 = repo.findByLogin(login);
 		Optional<User> u2 = repo.findByPassword(password);
 		if(u1 != null && u2 != null)
 		{
-			if(u1.get().getId() == u2.get().getId()) return ResponseEntity.ok("redirect:/entity");
+			if(u1.get().getId() == u2.get().getId()) return "redirect:/entity";
 		}
-        return new ResponseEntity<>("signIn", null, 404);
+        return "signIn";
     }
 	
 	@Transactional
 	@PostMapping("signUp")
-    public ResponseEntity<String> add(@RequestParam String name ,@RequestParam String login , 
+    public String add(@RequestParam String name ,@RequestParam String login , 
     		@RequestParam String password , @RequestParam String mail , Model model) {
 			var message = User.builder()
 					.name(name)
@@ -77,7 +77,7 @@ public class GreetingController {
 	        repo.save(message);
         Iterable<User> messages = repo.findAll();
         model.addAttribute("messages", messages);
-        return ResponseEntity.ok("signIn");
+        return "signIn";
     }
 	
 	// поиск

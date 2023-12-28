@@ -24,6 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	// manage our jwt
 	private final JwtService jwtService;
 	private final UserDetailsService userDetailsService;
+	private final TokenRepository tokenRepository;
 	
 	@Override
 	protected void doFilterInternal(@NotNull HttpServletRequest request,@NotNull HttpServletResponse response,@NotNull FilterChain filterChain)
@@ -44,7 +45,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		if(login != null && SecurityContextHolder.getContext().getAuthentication() == null)
 		{
 			UserDetails userDetails = this.userDetailsService.loadUserByUsername(login);
-			if(jwtService.isTokenValid(jwt, userDetails))
+			var isTokenValid = tokenRepository.findByToken(jwt)
+			          .map(t -> !t.isExpired() && !t.isRevoked())
+			          .orElse(false);
+			if(jwtService.isTokenValid(jwt, userDetails) && isTokenValid)
 			{
 				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails , null , userDetails.getAuthorities());
 				token.setDetails(new WebAuthenticationDetailsSource()

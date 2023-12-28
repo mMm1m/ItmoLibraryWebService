@@ -50,8 +50,12 @@ public class User implements UserDetails {
 	private String login;
 	@Column(name = "Password")
 	private String password;
+	//@Column(name = "Encoded password")
+	//private String encodedPassword;
 	@Column(name = "Mail")
 	private String mail;
+	@OneToMany(mappedBy = "user")
+	private List<Token> tokens;
 	@Enumerated(EnumType.STRING)
 	@Column(name = "Role")
 	private Role role;
