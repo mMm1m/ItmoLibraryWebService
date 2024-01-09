@@ -3,6 +3,7 @@ package com.example.demo1;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Random;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -36,26 +37,25 @@ public class AuthenticationService {
 	private final JwtService service;
 	private final AuthenticationManager manager;
 	private final PasswordEncoder encoder;
-	private final EmailValidator validator;
-	private final EmailSender emailSender;
-	private final ConfirmationToken confirmationToken;
 	private final ConfirmationTokenService confirmationTokenService;
+	private final ConfirmationTokenRepository confirmationTokenRepository;
+	private final EmailSender emailSender;
 	
 	
 	public AuthenticationResponse register(RegisterRequest request)
 	{
-		var isCorrectMail = validator.test(request.getEmail());
-		var isCorrectLogin = validator.test(request.getLogin());
-		if(!isCorrectMail || !isCorrectLogin) 
-			throw new IllegalStateException("email or login isn't correct");
-		
-		var user = User.builder()
+		/*boolean userExists = repository
+                .findByMail(request.getEmail())
+                .isPresent();
+
+        if (userExists) {
+            throw new IllegalStateException("email already taken");
+        }*/
+        		var user = User.builder()
 				.name(request.getName())
 				.login(request.getLogin())
 				.mail(request.getEmail())
 				.password(encoder.encode(request.getPassword()))
-				//.encodedPassword(request.getPassword())
-				//.role(request.getRole())
 				.role(Role.USER)
 				.build();
 		var savedUser = repository.save(user);
@@ -63,10 +63,21 @@ public class AuthenticationService {
 	    var refreshToken = service.generateRefreshToken(user);
 	    saveUserToken(savedUser, jwtToken);
 	    
-	    String link = "http://localhost:8080/auth/register/confirm?token=" + jwtToken;
-        emailSender.send(
-                request.getEmail(),
-                buildEmail(request.getName(), link));
+	    String token = UUID.randomUUID().toString();
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15),
+                savedUser
+        );
+
+        confirmationTokenService.saveConfirmationToken(
+                confirmationToken);
+        
+        String link = "http://localhost:8080/auth/confirm?token="+token;
+        
+       emailSender.send(request.getEmail(), buildEmail(request.getName() , link));
 	    
 	    return AuthenticationResponse.builder()
 	        .accessToken(jwtToken)
@@ -142,7 +153,6 @@ public class AuthenticationService {
 		    }
 		  }
 		  
-		  // ?
 		  @Transactional
 		    public String confirmToken(String token) {
 		        ConfirmationToken confirmationToken = confirmationTokenService
@@ -161,10 +171,9 @@ public class AuthenticationService {
 		        }
 
 		        confirmationTokenService.setConfirmedAt(token);
-		        //appUserService.enableAppUser(
-		                //confirmationToken.getAppUser().getEmail());
 		        return "confirmed";
 		    }
+		  
 		
 		  private String buildEmail(String name, String link) {
 		        return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +

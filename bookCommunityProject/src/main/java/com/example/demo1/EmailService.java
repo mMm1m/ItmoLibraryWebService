@@ -10,19 +10,20 @@ import org.springframework.stereotype.Service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 
 @Service
 @AllArgsConstructor
-public class EmailService implements EmailSender {
+public class EmailService implements EmailSender{
 
-	private final static Logger LOGGER = LoggerFactory
+    private final static Logger LOGGER = LoggerFactory
             .getLogger(EmailService.class);
 
     private final JavaMailSender mailSender;
 
     @Override
     @Async
-    public void send(String to, String email) {
+    public void send( String to, String email) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper =
@@ -30,12 +31,11 @@ public class EmailService implements EmailSender {
             helper.setText(email, true);
             helper.setTo(to);
             helper.setSubject("Confirm your email");
-            helper.setFrom("hello@amigoscode.com");
+            helper.setFrom("bookCommunity@gmail.com");
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
             LOGGER.error("failed to send email", e);
             throw new IllegalStateException("failed to send email");
         }
     }
-
 }
