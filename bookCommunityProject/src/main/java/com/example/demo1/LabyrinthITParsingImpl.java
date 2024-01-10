@@ -4,6 +4,8 @@ import com.example.demo1.IncorrectBookID;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import lombok.RequiredArgsConstructor;
+
 import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.io.StringWriter;
@@ -15,19 +17,23 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 
 @Service
-@Component
 // parsing of thr page( realize book_parser and html_parsing)
 public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements BookParserService {
     // заполнить поля в соответствующих методах
     private Book book = null;
+    @Autowired
+    private BookService bookService;
+    @Autowired
+    private AuthorService authorService;
     private Set<String> idealSet =  fillSet();
-    private Map<Author, Set<Book>> map = new HashMap<>(); 
+    private Map<Author, List<Book>> map = new HashMap<>(); 
 
     @Override
     public boolean checkLabyrinthShopName(Document document) {
@@ -123,7 +129,7 @@ public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements Book
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
             mapper.writeValue(writer, this.book);
             ans = writer.toString();
-            System.out.println(ans);
+            bookService.save(book);
         }
         catch(InvalidObjectException exception)
         {
@@ -148,16 +154,16 @@ public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements Book
         return ans;
     }
 
-    public Map<Author , Set<Book>> fillMap(Set<Author> authors)
+    public Map<Author , List<Book>> fillMap(List<Author> authors)
     {
         for(var a : authors)
         {
-            map.putIfAbsent(a,  new HashSet<>());
+            map.putIfAbsent(a,  new LinkedList<>());
             if(map.get(a).isEmpty()) {
-                map.put(a, new HashSet<>(List.of(this.book)));
+                map.put(a, new LinkedList<>(List.of(this.book)));
                 continue;
             }
-            Set<Book> books = map.get(a);
+            List<Book> books = map.get(a);
             books.add(this.book);
             map.put(a, books);
         }
@@ -175,13 +181,12 @@ public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements Book
         try
         {
         this.book = new Book(getAuthors(doc), getBookName(doc), getBookYear(doc), getBookISBN(doc), getBookID(doc));
-        Set<Author> authors = this.book.getAuthors();
-        this.map = fillMap(authors);
+        this.map = fillMap(this.book.getAuthors());
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         mapper.writeValue(writer , map);
         ans =  writer.toString();
-        System.out.println(ans);
-            System.out.println();
+        for(var a : this.book.getAuthors())
+        	authorService.save(a);
         }
         catch(InvalidObjectException exception)
         {
@@ -216,9 +221,9 @@ public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements Book
     }
 
     @Override
-    public Set<Author> getAuthors(Document document) {
+    public List<Author> getAuthors(Document document) {
         var authorTmp = document.getElementsByClass("authors");
-        Set<Author> authorList = new HashSet<>();
+        List<Author> authorList = new LinkedList<>();
         int curr_start = 0, count = 0;
         for (var a : authorTmp) {
             if(!a.text().trim().startsWith("Автор")) continue;

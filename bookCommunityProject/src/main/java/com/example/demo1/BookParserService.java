@@ -14,7 +14,7 @@ import java.util.Set;
 @Component
 public interface BookParserService {
     String getBookName(Document document);
-    Set<Author> getAuthors(Document document);
+    List<Author> getAuthors(Document document);
     String getBookISBN(Document document) throws IncorrectBookISBN;
     Long getBookYear(Document document) throws IncorrectBookYear;
     Long getBookID(Document document) throws IncorrectBookID;

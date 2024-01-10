@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -40,18 +41,17 @@ public class WebSecurityConfig {
 	
 	private static final String[] WHITE_LIST_URL = {"/bookCommunity" , 
 			"/bookCommunity/about", "/bookCommunity/signUp", "/bookCommunity/signIn",
-			"/auth/**"};
+			"/auth/**", "/bookCommunity/uploadBook/**"};
 	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
         .csrf().disable()
-        .authorizeHttpRequests()
-        .requestMatchers(WHITE_LIST_URL)
-        .permitAll()
-        .anyRequest()
-        .authenticated()
-        .and()
+        .cors().disable()
+        .authorizeHttpRequests(request -> request.requestMatchers(WHITE_LIST_URL)
+                .permitAll()
+                .anyRequest()
+                .authenticated())
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                         .and().authenticationProvider(authenticationProvider)
