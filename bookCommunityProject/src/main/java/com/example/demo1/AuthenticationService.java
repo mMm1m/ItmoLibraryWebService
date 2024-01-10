@@ -41,16 +41,8 @@ public class AuthenticationService {
 	private final ConfirmationTokenRepository confirmationTokenRepository;
 	private final EmailSender emailSender;
 	
-	
 	public AuthenticationResponse register(RegisterRequest request)
 	{
-		/*boolean userExists = repository
-                .findByMail(request.getEmail())
-                .isPresent();
-
-        if (userExists) {
-            throw new IllegalStateException("email already taken");
-        }*/
         		var user = User.builder()
 				.name(request.getName())
 				.login(request.getLogin())
@@ -77,7 +69,8 @@ public class AuthenticationService {
         
         String link = "http://localhost:8080/auth/confirm?token="+token;
         
-       emailSender.send(request.getEmail(), buildEmail(request.getName() , link));
+        
+       //emailSender.send(request.getName(), link);
 	    
 	    return AuthenticationResponse.builder()
 	        .accessToken(jwtToken)
@@ -95,7 +88,6 @@ public class AuthenticationService {
 		        .orElseThrow();
 		var jwtToken = service.generateToken(user);
 	    var refreshToken = service.generateRefreshToken(user);
-	    // change to: String token = generateConfirmationToken()
 	    revokeAllUserTokens(user);
 	    saveUserToken(user, jwtToken);
 	    return AuthenticationResponse.builder()

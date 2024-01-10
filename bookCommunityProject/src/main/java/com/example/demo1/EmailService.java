@@ -2,6 +2,7 @@ package com.example.demo1;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -23,13 +24,13 @@ public class EmailService implements EmailSender{
 
     @Override
     @Async
-    public void send( String to, String email) {
+    public void send( String tooooo, String email) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper =
                     new MimeMessageHelper(mimeMessage, "utf-8");
             helper.setText(email, true);
-            helper.setTo(to);
+            helper.setTo(tooooo);
             helper.setSubject("Confirm your email");
             helper.setFrom("bookCommunity@gmail.com");
             mailSender.send(mimeMessage);
