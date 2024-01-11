@@ -64,4 +64,16 @@ public class BookService implements IBookService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public boolean existsByIsbn(String isbn)
+	{
+		return bookRepository.existsByIsbn(isbn);
+	}
+
+	@Override
+	public boolean existsByBookName(String name) {
+		return bookRepository.existsByBookName(name);
+	}
+	
 }

@@ -35,6 +35,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements UserDetails {
 	@Id
 	@GeneratedValue
+	@Column(name = "user_id")
 	private Integer id;
 	@Column(name = "Name")
 	private String name;
@@ -42,8 +43,6 @@ public class User implements UserDetails {
 	private String login;
 	@Column(name = "Password")
 	private String password;
-	//@Column(name = "Encoded password")
-	//private String encodedPassword;
 	@Column(name = "Mail")
 	private String mail;
 	@OneToMany(mappedBy = "user")

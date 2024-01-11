@@ -8,4 +8,6 @@ public interface IBookService {
 	List<Book> getByAuthor(String author);
 	Book findById(Long id);
 	Book save(Book book);
+	boolean existsByIsbn(String isbn);
+	boolean existsByBookName(String name);
 }

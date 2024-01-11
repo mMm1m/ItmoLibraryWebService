@@ -28,10 +28,12 @@ import java.util.Set;
 public class Book {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-    public long book_id;
-	@ManyToMany(fetch=FetchType.LAZY)
-	@JoinTable(name = "authors")
-    public List<Author> authors = null;
+    public Long book_id;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
+	//@Column(name = "Authors")
+    //public List<Author> authors = null;
     @Column(name = "BookName")
     public String bookName = null;
     @Column(name = "Year")
@@ -42,30 +44,26 @@ public class Book {
     private String link = null;
     @Column(name = "Shop")
     private String shop = null;
-    @Column(name = "Owner_id")
-    private String owner_id = null;
     
     public Book(){}
     
-    public Book(List<Author> authors, String bookName, Long year, String isbn, Long id)
+    public Book( String bookName, Long year, String isbn, Long id)
     {
-        this.authors = authors;
         this.bookName = bookName;
         this.year = year;
         this.isbn = isbn;
         this.book_id = id;
     }
     
-    public Book(List<Author> authors, String bookName, Long year, String isbn, Long id, String link, String shop , String owner_id)
+    public Book(String bookName, Long year, String isbn, Long id, String link, String shop)
     {
-    	this(authors , bookName , year , isbn , id);
+    	this(bookName , year , isbn , id);
     	this.link = link;
 		this.shop = shop;
-		this.owner_id = owner_id;
     }
     
-    public List<Author> getAuthors()
+    /*public List<Author> getAuthors()
     {
     	return this.authors;
-    }
+    }*/
 }

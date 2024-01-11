@@ -20,6 +20,5 @@ public interface BookParserService {
     Long getBookID(Document document) throws IncorrectBookID;
     boolean checkGenre(Document document);
     boolean checkIsCorrectShop(boolean criteria1, boolean criteria2);
-    String parseBookPage(String url) throws IOException, IncorrectBookYear, IncorrectBookISBN, IncorrectBookID;
-    String parseAuthorPage(String url) throws IOException, IncorrectBookYear, IncorrectBookISBN, IncorrectBookID;
+    Book parseBookPage(String url) throws IOException, IncorrectBookYear, IncorrectBookISBN, IncorrectBookID;
 }

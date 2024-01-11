@@ -43,6 +43,11 @@ public class AuthenticationService {
 	
 	public AuthenticationResponse register(RegisterRequest request)
 	{
+		if(repository.existsByName(request.getName()) || repository.existsByName(request.getEmail()) ||
+				repository.existsByName(request.getLogin()))
+		{
+			return null;
+		}
         		var user = User.builder()
 				.name(request.getName())
 				.login(request.getLogin())
@@ -69,8 +74,7 @@ public class AuthenticationService {
         
         String link = "http://localhost:8080/auth/confirm?token="+token;
         
-        
-       //emailSender.send(request.getName(), link);
+        //emailSender.send(request.getName(), link);
 	    
 	    return AuthenticationResponse.builder()
 	        .accessToken(jwtToken)

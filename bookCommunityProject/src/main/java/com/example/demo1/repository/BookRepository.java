@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 // методы для использования базы данных
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
+	public boolean existsByIsbn(String isbn);
+	public boolean existsByBookName(String name);
 	/*List<Book> findByName(String name);
 	List<Book> findByAuthor(String name);*/
 }

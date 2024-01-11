@@ -30,8 +30,6 @@ public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements Book
     private Book book = null;
     @Autowired
     private BookService bookService;
-    @Autowired
-    private AuthorService authorService;
     private Set<String> idealSet =  fillSet();
     private Map<Author, List<Book>> map = new HashMap<>(); 
 
@@ -76,6 +74,7 @@ public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements Book
     public boolean checkGenre(Document document) {
         Element genre = document.getElementById("thermometer-books");
         Elements select = genre.select("span");
+        if(genre == null || select == null) return false;
         fillSet();
         int initSize = idealSet.size();
         for(var a : select)
@@ -117,19 +116,27 @@ public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements Book
     }
 
     @Override
-    public String parseBookPage(String url) throws IOException, IncorrectBookYear, IncorrectBookISBN, IncorrectBookID {
+    public Book parseBookPage(String url) throws IOException, IncorrectBookYear, IncorrectBookISBN, IncorrectBookID {
         String ans = null;
         ObjectMapper mapper = new ObjectMapper();
         StringWriter writer = new StringWriter();
         Document doc = getDocument(url);
+        if(doc == null) return null;
         Logger logger = LoggerFactory.getLogger(LabyrinthITParsingImpl.class);
         try
         {
-            this.book = new Book(getAuthors(doc), getBookName(doc), getBookYear(doc), getBookISBN(doc), getBookID(doc));
+            this.book = new Book(getBookName(doc), getBookYear(doc), getBookISBN(doc), getBookID(doc));
+            if(this.book.getBookName() == null || this.book.getYear() == null
+            		||  this.book.getIsbn() == null || this.book.getBook_id() == null)
+            {
+            	return null;
+            }
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
             mapper.writeValue(writer, this.book);
             ans = writer.toString();
-            bookService.save(book);
+            
+            if(!bookService.existsByIsbn(this.book.getIsbn()) && !bookService.existsByBookName(this.book.getBookName()))
+            		bookService.save(book);
         }
         catch(InvalidObjectException exception)
         {
@@ -151,7 +158,7 @@ public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements Book
         {
             logger.error("", exception);
         }
-        return ans;
+        return book;
     }
 
     public Map<Author , List<Book>> fillMap(List<Author> authors)
@@ -170,46 +177,6 @@ public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements Book
         return this.map;
     }
 
-    @Override
-    //@Scheduled(fixedDelay = 5000)
-    public String parseAuthorPage(String url) throws IOException, IncorrectBookYear, IncorrectBookISBN, IncorrectBookID {
-        String ans = null;
-        ObjectMapper mapper = new ObjectMapper();
-        StringWriter writer = new StringWriter();
-        Document doc = getDocument(url);
-        Logger logger = LoggerFactory.getLogger(LabyrinthITParsingImpl.class);
-        try
-        {
-        this.book = new Book(getAuthors(doc), getBookName(doc), getBookYear(doc), getBookISBN(doc), getBookID(doc));
-        this.map = fillMap(this.book.getAuthors());
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        mapper.writeValue(writer , map);
-        ans =  writer.toString();
-        for(var a : this.book.getAuthors())
-        	authorService.save(a);
-        }
-        catch(InvalidObjectException exception)
-        {
-            logger.error(exception.getMessage(), exception);
-        }
-        catch (IncorrectBookID exception)
-        {
-            logger.error("Incorrect shop information!!!", exception);
-        }
-        catch(IncorrectBookISBN exception)
-        {
-            logger.error("NullPointer exception!!!", exception);
-        }
-        catch(IncorrectBookYear exception)
-        {
-            logger.error("In-Out exception!!!", exception);
-        }
-        catch(Exception exception)
-        {
-            logger.error("", exception);
-        }
-        return ans;
-    }
 
     @Override
     public String getBookName(Document document) {

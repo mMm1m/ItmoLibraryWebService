@@ -41,9 +41,19 @@ public class WebSecurityConfig {
 	
 	private static final String[] WHITE_LIST_URL = {"/bookCommunity" , 
 			"/bookCommunity/about", "/bookCommunity/signUp", "/bookCommunity/signIn",
-			"/auth/**", "/bookCommunity/uploadBook/**"};
+			"/auth/**", "/bookCommunity/uploadBook/**" ,"/bookCommunity/uploadBook/uploadWithReference"
+					,"/bookCommunity/uploadBook/uploadWithReference/reference" };
 	
 	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
+	{
+		http.csrf().disable()
+		.authorizeHttpRequests(request -> request.requestMatchers(WHITE_LIST_URL)
+				.permitAll().anyRequest().permitAll());
+		return http.build();
+	}
+	
+	/*@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
         .csrf().disable()
@@ -57,5 +67,5 @@ public class WebSecurityConfig {
                         .and().authenticationProvider(authenticationProvider)
                         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         		return http.build();
-	}
+	}*/
 }

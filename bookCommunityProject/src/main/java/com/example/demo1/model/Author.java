@@ -27,18 +27,9 @@ import jakarta.persistence.Table;
 @Getter
 @Setter
 @JsonAutoDetect
-@Entity
-@Table(name = "authors")
 public class Author {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long author_id;
-    @Column(name = "AutorName")
     private String authorName = null;
-    @Column(name = "AuthorSurname")
     private String authorSurname = null;
-    @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name = "books")
     private List<Book> book;
     Author(String aN , String aS)
     {

@@ -30,6 +30,13 @@ public class FileService {
 	}
 	
 	public byte[] getFiles(String fileName) {
-		return fileRepository.findByName(fileName).getPdfData();
+		if(fileRepository.findByName(fileName).getPdfData() != null)
+			return fileRepository.findByName(fileName).getPdfData();
+		return new byte[0];
+	}
+	
+	boolean existsByName(String name)
+	{
+		return fileRepository.existsByName(name);
 	}
 }
