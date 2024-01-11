@@ -1,6 +1,7 @@
 package com.example.demo1;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -36,33 +37,15 @@ public class BookService implements IBookService {
 		return Lists.newArrayList(bookRepository.findByAuthor(author));
 	}*/
 
-	/*@Override
+	@Override
 	@Transactional(readOnly = true)
 	public Book findById(Long id) {
-		return bookRepository.findOne(id);
-	}*/
+		return bookRepository.findById(id).get();
+	}
 
 	@Override
 	public Book save(Book book) {
 		return bookRepository.save(book);
-	}
-
-	@Override
-	public List<Book> getByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Book> getByAuthor(String author) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Book findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 	@Override

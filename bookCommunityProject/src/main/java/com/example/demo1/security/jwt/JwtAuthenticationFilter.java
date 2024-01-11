@@ -39,9 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
 		jwt = authHeader.substring(7);
-		// extract login from jwt
 		login = jwtService.extractUserLogin(jwt);
-		// user is not authenticated
 		if(login != null && SecurityContextHolder.getContext().getAuthentication() == null)
 		{
 			UserDetails userDetails = this.userDetailsService.loadUserByUsername(login);

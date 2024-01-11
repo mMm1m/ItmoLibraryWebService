@@ -32,8 +32,6 @@ public class Book {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
-	//@Column(name = "Authors")
-    //public List<Author> authors = null;
     @Column(name = "BookName")
     public String bookName = null;
     @Column(name = "Year")
@@ -61,9 +59,4 @@ public class Book {
     	this.link = link;
 		this.shop = shop;
     }
-    
-    /*public List<Author> getAuthors()
-    {
-    	return this.authors;
-    }*/
 }

@@ -24,9 +24,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-// parsing of thr page( realize book_parser and html_parsing)
 public class LabyrinthITParsingImpl extends LabyrinthParsingHtml implements BookParserService {
-    // заполнить поля в соответствующих методах
     private Book book = null;
     @Autowired
     private BookService bookService;

@@ -26,9 +26,7 @@ public class AuthenticationController {
 	private final AuthenticationService service;
     
 	@PostMapping("/register")
-	  public ResponseEntity register(
-	      @RequestBody RegisterRequest request
-	  ){
+	  public ResponseEntity register(@RequestBody RegisterRequest request){
 		if(service.register(request) != null) return ResponseEntity.ok().build();
 		return ResponseEntity.status(413).build();
 	  }
@@ -53,6 +51,4 @@ public class AuthenticationController {
 	  ) throws IOException {
 	    service.refreshToken(request, response);
 	  }
-	
-	
 }

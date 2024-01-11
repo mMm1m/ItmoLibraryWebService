@@ -1,6 +1,5 @@
 package com.example.demo1;
 
-//import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;

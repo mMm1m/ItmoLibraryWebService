@@ -25,14 +25,13 @@ import jakarta.transaction.Transactional;
 
 @Controller
 @RequestMapping("/bookCommunity")
-public class GreetingController {
+public class HtmlFormController {
 	@Autowired
 	private UserRepository repo;
 	
 	@GetMapping
 	public String home()
 	{
-		//repo.deleteAll();
 		return "main";
 	}
 	
@@ -94,12 +93,4 @@ public class GreetingController {
     	model.addAttribute("exist", flag);
         return ResponseEntity.ok("signUp");
     }
-	
-	/*@GetMapping("/{id}")
-	public ResponseEntity<User> userPage(@PathVariable String id , Model model)
-	{
-		model.addAttribute("id", id);
-		return new ResponseEntity<User>(HttpStatus.OK);
-	}*/
-	
 }

@@ -44,16 +44,16 @@ public class WebSecurityConfig {
 			"/auth/**", "/bookCommunity/uploadBook/**" ,"/bookCommunity/uploadBook/uploadWithReference"
 					,"/bookCommunity/uploadBook/uploadWithReference/reference" };
 	
-	@Bean
+	/*@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
 	{
 		http.csrf().disable()
 		.authorizeHttpRequests(request -> request.requestMatchers(WHITE_LIST_URL)
 				.permitAll().anyRequest().permitAll());
 		return http.build();
-	}
+	}*/
 	
-	/*@Bean
+	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
         .csrf().disable()
@@ -67,5 +67,5 @@ public class WebSecurityConfig {
                         .and().authenticationProvider(authenticationProvider)
                         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         		return http.build();
-	}*/
+	}
 }
