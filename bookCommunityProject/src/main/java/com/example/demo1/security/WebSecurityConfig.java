@@ -1,5 +1,7 @@
 package com.example.demo1;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +29,10 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import lombok.RequiredArgsConstructor;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @EnableWebSecurity
@@ -38,11 +42,9 @@ public class WebSecurityConfig {
 	
 	private final JwtAuthenticationFilter jwtAuthFilter;
 	private final AuthenticationProvider authenticationProvider;
-	
 	private static final String[] WHITE_LIST_URL = {"/bookCommunity" , 
 			"/bookCommunity/about", "/bookCommunity/signUp", "/bookCommunity/signIn",
-			"/auth/**", "/bookCommunity/uploadBook/**" ,"/bookCommunity/uploadBook/uploadWithReference"
-					,"/bookCommunity/uploadBook/uploadWithReference/reference" };
+			"/auth/**", "/bookCommunity/uploadBook/**"};
 	
 	/*@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
@@ -57,14 +59,20 @@ public class WebSecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
         .csrf().disable()
-        .cors().disable()
+        .cors(cors -> cors.configurationSource(request -> {
+            var corsConfiguration = new CorsConfiguration();
+            corsConfiguration.setAllowedOriginPatterns(List.of("*"));
+            corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+            corsConfiguration.setAllowedHeaders(List.of("*"));
+            corsConfiguration.setAllowCredentials(true);
+            return corsConfiguration;
+        }))
         .authorizeHttpRequests(request -> request.requestMatchers(WHITE_LIST_URL)
                 .permitAll()
                 .anyRequest()
                 .authenticated())
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                        .and().authenticationProvider(authenticationProvider)
+        .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
+        .authenticationProvider(authenticationProvider)
                         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         		return http.build();
 	}
